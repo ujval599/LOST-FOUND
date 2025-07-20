@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Campus Lost & Found</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .hero-banner {
+            background: 
+                linear-gradient(to right, rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.7)),
+                url('https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&w=2071&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-search-location text-xl text-indigo-600"></i>
+                <h1 class="text-xl font-bold text-gray-800">CampusLost<span class="text-indigo-600">&</span>Found</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="http://127.0.0.1:5500/home.html" class="text-gray-700 hover:text-indigo-600">Home</a>
+                  <a href="http://127.0.0.1:5500/lostitem.html" class="font-medium text-gray-700 hover:text-indigo-600 transition">Lost item</a>
+                    <a href="http://127.0.0.1:5500/founditem.html" class="font-medium text-gray-700 hover:text-indigo-600 transition">Found item</a>
+                <a href="http://127.0.0.1:5500/about.html" class="text-gray-700 hover:text-indigo-600">About</a>
+                <a href="http://127.0.0.1:5500/contect.html" class="text-gray-700 hover:text-indigo-600">Contact</a>
+                <a href="http://127.0.0.1:5500/FQ.html" class="text-gray-700 hover:text-indigo-600">FAQ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner text-white py-20 md:py-28">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Admin Panel</h1>
+                <p class="text-xl mb-8">Manage lost and found items effectively.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Overview -->
+    <section class="py-12 px-4">
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-indigo-50 p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-bold text-indigo-700">Total Lost Items</h3>
+                    <p class="text-3xl text-gray-800">0</p>
+                </div>
+                <div class="bg-green-50 p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-bold text-green-700">Total Found Items</h3>
+                    <p class="text-3xl text-gray-800">0</p>
+                </div>
+                <div class="bg-yellow-50 p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-bold text-yellow-700">Active Users</h3>
+                    <p class="text-3xl text-gray-800">0</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="py-12 px-4">
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Recent Activity</h2>
+            <ul class="space-y-4">
+                <li class="p-4 border rounded-lg hover:shadow">
+                    <p class="text-gray-600">User John Doe reported a lost wallet.</p>
+                    <span class="text-sm text-gray-500">2 hours ago</span>
+                </li>
+                <li class="p-4 border rounded-lg hover:shadow">
+                    <p class="text-gray-600">User Jane Smith found a set of keys.</p>
+                    <span class="text-sm text-gray-500">3 hours ago</span>
+                </li>
+                <li class="p-4 border rounded-lg hover:shadow">
+                    <p class="text-gray-600">User Alex Johnson reported a lost backpack.</p>
+                    <span class="text-sm text-gray-500">5 hours ago</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Notifications -->
+    <section class="py-12 px-4">
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Notifications</h2>
+            <ul class="space-y-4">
+                <li class="p-4 border rounded-lg bg-yellow-50">
+                    <p class="text-gray-600">New user registration pending approval.</p>
+                </li>
+                <li class="p-4 border rounded-lg bg-red-50">
+                    <p class="text-gray-600">Item recovery request for item ID #12345.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- User Management -->
+    <section class="py-12 px-4">
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">User Management</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 border rounded-lg hover:shadow">
+                    <h3 class="text-lg font-semibold mb-2 text-indigo-700"><i class="fas fa-user-shield mr-2"></i> Manage Users</h3>
+                    <p class="text-gray-600">View, approve or delete user accounts.</p>
+                </div>
+                <div class="p-4 border rounded-lg hover:shadow">
+                    <h3 class="text-lg font-semibold mb-2 text-red-700"><i class="fas fa-cogs mr-2"></i> System Settings</h3>
+                    <p class="text-gray-600">Control system configurations and notifications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
