@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQs - Campus Lost & Found</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hero-banner {
+        background: 
+            linear-gradient(to right, rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.7)),
+            url('https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&w=2071&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-search-location text-xl text-indigo-600"></i>
+        <h1 class="text-xl font-bold text-gray-800">CampusLost<span class="text-indigo-600">&</span>Found</h1>
+      </div>
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="http://127.0.0.1:5500/home.html" class="text-gray-700 hover:text-indigo-600">Home</a>
+        <a href="http://127.0.0.1:5500/lostitem.html" class="font-medium text-gray-700 hover:text-indigo-600 transition">Lost item</a>
+                    <a href="http://127.0.0.1:5500/founditem.html" class="font-medium text-gray-700 hover:text-indigo-600 transition">Found item</a>
+                    <a href="http://127.0.0.1:5500/contect.html" class="font-medium text-gray-700 hover:text-indigo-600 transition">Contact</a>
+                    <a href="http://127.0.0.1:5500/about.html" class="font-medium text-gray-700 hover:text-indigo-600 transition">About</a>
+                    <a href="http://127.0.0.1:5500/admin.html" class="font-medium text-gray-700 hover:text-indigo-600 transition">Admin panal</a>
+        <a href="faq.html" class="text-indigo-600 font-bold">FAQ</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner text-white py-20 md:py-28">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">Frequently Asked Questions</h2>
+      <p class="text-xl mb-8">Find answers to common questions about our service.</p>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-16 px-4 bg-white">
+    <div class="max-w-4xl mx-auto">
+      <div class="space-y-6">
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm">
+          <h4 class="text-xl font-semibold text-indigo-700 mb-1">🔍 How do I report a lost item?</h4>
+          <p class="text-gray-600">To report a lost item, click on "Report Item" on the homepage. Fill in the required details such as item description, location where it was lost, and your contact information. Once submitted, our team will review the report and assist you in the recovery process.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm">
+          <h4 class="text-xl font-semibold text-indigo-700 mb-1">🔎 How can I search for found items?</h4>
+          <p class="text-gray-600">You can search for found items by visiting the "Found" section on our homepage. Use the search bar to filter items by category, date found, or keywords related to the item. If you find a match, you can contact the person who reported it.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm">
+          <h4 class="text-xl font-semibold text-indigo-700 mb-1">🧾 Do I need proof to claim an item?</h4>
+          <p class="text-gray-600">Yes, to claim an item, you must provide valid identification and any details that match the item description. This ensures that items are returned to their rightful owners.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm">
+          <h4 class="text-xl font-semibold text-indigo-700 mb-1">🕒 How long are items stored?</h4>
+          <p class="text-gray-600">Lost items are stored for a period of 30 days. After this period, unclaimed items may be donated to local charities or discarded, depending on their condition.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm">
+          <h4 class="text-xl font-semibold text-indigo-700 mb-1">📞 How can I contact support for further questions?</h4>
+          <p class="text-gray-600">For any additional questions or support, you can reach out to us through the "Contact" page. Fill out the contact form, and our support team will get back to you as soon as possible.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm">
+          <h4 class="text-xl font-semibold text-indigo-700 mb-1">💡 What should I do if I find a lost item?</h4>
+          <p class="text-gray-600">If you find a lost item, please report it using the "Found Item" section on our homepage. Provide details about the item and where you found it, so we can help reunite it with its owner.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
