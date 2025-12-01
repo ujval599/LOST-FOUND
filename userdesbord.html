@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Lost & Found — User Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-card {
+            transition: all 0.2s ease;
+        }
+
+        .item-card:hover {
+            transform: scale(1.02);
+        }
+
+        .counter { font-variant-numeric: tabular-nums; }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: absolute;
+                z-index: 10;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white w-64 border-r border-gray-200 flex flex-col">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                       <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo" width="40">
+
+                    <span class="font-bold text-xl text-indigo-600">Lost & Found</span>
+                </div>
+            </div>
+                   
+                 
+                 
+
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="userdesbord.html" class="flex items-center space-x-3 p-3 rounded-lg bg-indigo-50 text-indigo-600">
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="founditem.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <span>Report Found</span>
+                </a>
+                <a href="lostitem.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <span>Report Lost</span>
+                </a>
+                <a href="userprofile.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <span>My Profile</span>
+                </a>
+               
+            </nav>
+
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <img src="https://placehold.co/40x40" alt="User profile picture" class="rounded-full">
+                    <div>
+                        <p class="font-medium">Ujval Bhavre</p>
+                        <p class="text-sm text-gray-500">Admin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <button class="md:hidden" onclick="toggleSidebar()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
+                <div class="flex-1 max-w-md ml-4 md:ml-0">
+                    <div class="relative">
+                        <input id="search" type="text" placeholder="Search your items..." class="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white">
+                    </div>
+                </div>
+
+                           <a href="login.html" 
+                       class="border border-indigo-600 text-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex items-center space-x-2 ">
+                       Logout
+                    </a>
+
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+                <div class="mb-6 flex items-center justify-between">
+                    <h1 class="text-2xl font-bold text-gray-800">Your Items</h1>
+                    <button id="addItemBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add Item</button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="dashboard-card bg-white rounded-xl shadow p-6 border-l-4 border-indigo-500">
+                        <p class="text-sm font-medium text-gray-500">Total Items Added</p>
+                        <div id="statTotal" class="text-3xl font-bold mt-2 counter">0</div>
+                    </div>
+                    <div class="dashboard-card bg-white rounded-xl shadow p-6 border-l-4 border-red-500">
+                        <p class="text-sm font-medium text-gray-500">Lost Items</p>
+                        <div id="statLost" class="text-3xl font-bold mt-2 counter">0</div>
+                    </div>
+                    <div class="dashboard-card bg-white rounded-xl shadow p-6 border-l-4 border-green-500">
+                        <p class="text-sm font-medium text-gray-500">Found Items</p>
+                        <div id="statFound" class="text-3xl font-bold mt-2 counter">0</div>
+                    </div>
+                </div>
+
+                <!-- Item list -->
+                <div id="itemsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ADD / EDIT MODAL -->
+<div id="modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg w-full max-w-xl p-6 shadow-lg">
+        <h3 id="modalTitle" class="text-lg font-semibold mb-3">Add Item</h3>
+        <form id="itemForm" class="space-y-3">
+            <!-- Item Type: Lost or Found -->
+            <label class="font-medium">Item Type:</label>
+            <div class="flex gap-4">
+                <label class="flex items-center gap-2">
+                    <input type="radio" name="itemType" value="lost" required> Lost Item
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="radio" name="itemType" value="found" required> Found Item
+                </label>
+            </div>
+
+            <!-- Item Name -->
+            <label for="itemName" class="font-medium">Item Name:</label>
+            <input type="text" id="itemName" name="itemName" required placeholder="e.g., Blue Backpack" class="w-full px-3 py-2 border rounded-lg">
+
+            <!-- Category -->
+            <label for="category" class="font-medium">Category:</label>
+            <select id="category" name="category" required class="w-full px-3 py-2 border rounded-lg">
+                <option value="">Select a category</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="books">Books/Notes</option>
+                <option value="keys">Keys/ID</option>
+                <option value="other">Other</option>
+            </select>
+
+            <!-- Description -->
+            <label for="description" class="font-medium">Description:</label>
+            <textarea id="description" name="description" rows="4" required placeholder="Detailed description..." class="w-full px-3 py-2 border rounded-lg"></textarea>
+
+            <!-- Date -->
+            <label for="date" class="font-medium">Date Lost/Found:</label>
+            <input type="date" id="date" name="date" required class="w-full px-3 py-2 border rounded-lg">
+
+            <!-- Location -->
+            <label for="location" class="font-medium">Location in College:</label>
+            <input type="text" id="location" name="location" required placeholder="e.g., Library" class="w-full px-3 py-2 border rounded-lg">
+
+            <!-- Student Details -->
+            <label for="studentName" class="font-medium">Your Name:</label>
+            <input type="text" id="studentName" name="studentName" required class="w-full px-3 py-2 border rounded-lg">
+
+           
+            <!-- Photo Upload -->
+            <label for="photo" class="font-medium">Upload Photo (Optional):</label>
+            <input type="file" id="photo" name="photo" accept="image/*" class="w-full">
+
+            <!-- Image Preview -->
+            <img id="preview" class="hidden w-32 h-32 object-cover mt-2 rounded border" alt="Preview">
+
+            <div class="mt-4 flex justify-end space-x-3">
+                <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+if (!token) {
+    alert("You must login first!");
+    window.location.href = "login.html";
+}
+
+let currentUser = JSON.parse(localStorage.getItem("user")) || { id: "" };
+
+const itemsList = document.getElementById('itemsList');
+const statTotal = document.getElementById('statTotal');
+const statLost = document.getElementById('statLost');
+const statFound = document.getElementById('statFound');
+const addItemBtn = document.getElementById('addItemBtn');
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modalTitle');
+const itemForm = document.getElementById('itemForm');
+const cancelBtn = document.getElementById('cancelBtn');
+const titleInput = document.getElementById('title');
+const descInput = document.getElementById('description');
+const typeInput = document.getElementById('type');
+const locationInput = document.getElementById('location');
+const imageInput = document.getElementById('imageInput');
+const preview = document.getElementById('preview');
+const search = document.getElementById('search');
+
+let items = [];
+
+async function loadItems() {
+    try {
+        const res = await fetch(`http://127.0.0.1:5000/api/items`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Failed to fetch items");
+        const data = await res.json();
+        items = data.items || [];
+        render();
+    } catch (err) {
+        console.error(err);
+        alert("Unable to load items. Please try again.");
+    }
+}
+
+function render() {
+    const q = search.value.trim().toLowerCase();
+    const myItems = items.filter(it => it.ownerId === currentUser.id);
+    const filtered = myItems.filter(it => {
+        if (!q) return true;
+        return (it.title + ' ' + (it.description||'') + ' ' + (it.location||'')).toLowerCase().includes(q);
+    }).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+
+    itemsList.innerHTML = '';
+    if (filtered.length === 0) {
+        itemsList.innerHTML = `<div class="col-span-full p-6 bg-white rounded-lg shadow text-gray-500">No items found. Add your first item.</div>`;
+    }
+    filtered.forEach(it => {
+        const card = document.createElement('div');
+        card.className = 'item-card bg-white rounded-lg p-4 shadow';
+        card.innerHTML = `
+            <div class="flex gap-3">
+                <div class="w-28 h-20 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
+                    ${it.image ? `<img src="${it.image}" class="object-cover w-full h-full">` : `<div class="text-sm text-gray-400">No image</div>`}
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="font-semibold">${escapeHtml(it.title)}</h3>
+                            <div class="text-xs text-gray-500">${escapeHtml(it.location || '')} • ${new Date(it.createdAt).toLocaleString()}</div>
+                        </div>
+                        <div class="text-sm px-2 py-1 rounded-md ${it.type === 'lost' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">${it.type}</div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">${escapeHtml(it.description || '')}</p>
+                </div>
+            </div>
+        `;
+        itemsList.appendChild(card);
+    });
+
+    statTotal.textContent = myItems.length;
+    statLost.textContent = myItems.filter(i=>i.type==='lost').length;
+    statFound.textContent = myItems.filter(i=>i.type==='found').length;
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, function (m) {
+        return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];
+    });
+}
+
+search.addEventListener('input', render);
+
+// Modal and Add Item
+addItemBtn.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+    modalTitle.textContent = 'Add Item';
+    itemForm.reset();
+    preview.src = '';
+    preview.classList.add('hidden');
+    editingId = null;
+});
+
+cancelBtn.addEventListener('click', () => modal.classList.add('hidden'));
+
+imageInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = '';
+        preview.classList.add('hidden');
+    }
+});
+
+itemForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+        title: titleInput.value.trim(),
+        description: descInput.value.trim(),
+        type: typeInput.value,
+        location: locationInput.value.trim(),
+        image: preview.src || ''
+    };
+
+    try {
+        const res = await fetch(`http://127.0.0.1:5000/api/items`, {
+            method: 'POST',
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error("Failed to add item");
+        const data = await res.json();
+        items.push(data.item);
+        render();
+        modal.classList.add('hidden');
+    } catch (err) {
+        console.error(err);
+        alert("Failed to add item.");
+    }
+});
+
+// Sidebar toggle for mobile
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('active');
+}
+
+loadItems();
+</script>
+
+</body>
+</html>

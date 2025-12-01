@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campus Lost & Found</title>
+    <style>
+      :root {
+        --color-bg: #ffffff;
+        --color-text: #0f172a;
+        --color-muted: #64748b;
+        --color-primary: #2563eb;
+        --color-accent: #f59e0b;
+        --radius: 0.625rem;
+        --shadow: 0 6px 18px rgba(2, 6, 23, 0.08);
+
+        /* Dark mode variables */
+        --color-bg-dark: #0f172a;
+        --color-text-dark: #f1f5f9;
+        --color-muted-dark: #94a3b8;
+        --color-card-bg-dark: #1e293b;
+        --color-pill-lost-dark: #f87171;
+        --color-pill-found-dark: #34d399;
+      }
+
+      /* Base styles */
+      * { box-sizing: border-box; }
+      html, body {
+        height: 100%;
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+        line-height: 1.55;
+        background: var(--color-bg);
+        color: var(--color-text);
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+      img { max-width: 100%; display: block; }
+
+      /* Header & Navbar */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--color-bg);
+        border-bottom: 1px solid rgba(2, 6, 23, 0.06);
+        backdrop-filter: saturate(1.2) blur(6px);
+      }
+      .container { max-width: 1100px; margin: 0 auto; padding: 1rem; width: 100%; }
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.5rem 0;
+      }
+      .brand { display: flex; align-items: center; gap: 0.75rem; }
+      .badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: radial-gradient(circle at 30% 30%, var(--color-primary) 0%, #1e40af 80%);
+        box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2), 0 6px 14px rgba(37, 99, 235, 0.35);
+      }
+      h1 { font-size: clamp(1.125rem, 2vw, 1.5rem); margin:0; letter-spacing: -0.01em; }
+      .subtle { color: var(--color-muted); font-size: 0.95rem; }
+
+      nav a {
+        margin-left: 1rem;
+        text-decoration: none;
+        font-weight: 600;
+        color: var(--color-text);
+        transition: color 0.2s;
+      }
+      nav a:hover { color: var(--color-primary); }
+      #dark-mode-toggle {
+        margin-left: 1rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius);
+        border: 1px solid rgba(2,6,23,0.1);
+        background: #fff;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      /* Controls */
+      .controls {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+      @media (min-width: 700px) { .controls { grid-template-columns: 1fr auto auto; align-items: center; } }
+      .field { position: relative; }
+      .input {
+        width: 100%;
+        padding: 0.75rem 0.9rem 0.75rem 2.25rem;
+        border: 1px solid rgba(2, 6, 23, 0.10);
+        border-radius: var(--radius);
+        background: #fff;
+        color: var(--color-text);
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      .input:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+      }
+      .input-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--color-muted); pointer-events: none; }
+      .segmented { display: inline-flex; border: 1px solid rgba(2,6,23,0.1); border-radius: calc(var(--radius)+2px); overflow: hidden; background: #fff; }
+      .segmented button { padding: 0.6rem 0.9rem; border: 0; background: transparent; color: var(--color-text); cursor: pointer; font-weight: 600; }
+      .segmented button + button { border-left: 1px solid rgba(2,6,23,0.1); }
+      .segmented button[aria-pressed="true"] { background: var(--color-primary); color:#fff; }
+      .select { padding:0.65rem 0.9rem; border:1px solid rgba(2,6,23,0.1); border-radius: var(--radius); background:#fff; color: var(--color-text); font-weight:600; }
+
+      /* Cards */
+      .grid { margin-top: 1.25rem; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+      @media (min-width: 560px){ .grid { grid-template-columns: repeat(2,1fr); } }
+      @media (min-width: 920px){ .grid { grid-template-columns: repeat(3,1fr); } }
+      .card {
+        border-radius: calc(var(--radius)+2px);
+        background: #fff;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .card:hover { transform: translateY(-2px); box-shadow:0 10px 24px rgba(2,6,23,0.12); }
+      .thumb { aspect-ratio:16/9; width:100%; background: radial-gradient(circle at 30% 30%, #e2e8f0 0%, #f1f5f9 70%); display:grid; place-items:center; color: var(--color-muted); font-weight:700; letter-spacing:0.03em; }
+      .thumb img { width:100%; height:100%; object-fit:cover; }
+      .content { padding:0.9rem; display:grid; gap:0.4rem; }
+      .title-row { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; }
+      .title { font-weight:800; letter-spacing:0.01em; }
+      .pill { padding:0.25rem 0.55rem; border-radius:999px; font-size:0.75rem; font-weight:700; letter-spacing:0.04em; border:1px solid rgba(2,6,23,0.08); }
+      .pill.lost { background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+      .pill.found { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+      .meta { display:flex; align-items:center; gap:0.6rem; color: var(--color-muted); font-size:0.9rem; flex-wrap:wrap; }
+      .desc { color: var(--color-text); }
+      .actions { display:flex; gap:0.5rem; margin-top:0.3rem; }
+      .btn { display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; padding:0.55rem 0.8rem; border-radius:var(--radius); border:1px solid rgba(2,6,23,0.1); background:#fff; color:var(--color-text); cursor:pointer; font-weight:700; transition:background 0.15s ease,color 0.15s ease,border-color 0.15s ease; }
+      .btn:hover { background:#f8fafc; }
+      .btn.primary { background:var(--color-primary); color:#fff; border-color:var(--color-primary); }
+      .btn.primary:hover { filter:brightness(0.95); }
+      .empty { display:grid; place-items:center; padding:2.5rem 1rem; color:var(--color-muted); border:1px dashed rgba(2,6,23,0.12); border-radius:var(--radius); background:#fff; }
+      .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+      footer { margin-top:2rem; padding:2rem 0; color:var(--color-muted); font-size:0.9rem; border-top:1px solid rgba(2,6,23,0.06); }
+
+      /* Dark mode overrides */
+      html[data-theme="dark"] {
+        --color-bg: var(--color-bg-dark);
+        --color-text: var(--color-text-dark);
+        --color-muted: var(--color-muted-dark);
+        --card-bg: var(--color-card-bg-dark);
+        --pill-lost: var(--color-pill-lost-dark);
+        --pill-found: var(--color-pill-found-dark);
+      }
+      html[data-theme="dark"] body { background: var(--color-bg); color: var(--color-text); }
+      html[data-theme="dark"] .card { background: var(--card-bg); }
+      html[data-theme="dark"] .input, html[data-theme="dark"] .select, html[data-theme="dark"] .segmented { background: var(--card-bg); color: var(--color-text); border-color: rgba(255,255,255,0.15); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-inner">
+        <div class="brand" aria-label="Site brand">
+          <div class="badge" aria-hidden="true"></div>
+          <div>
+            <h1>Campus Lost & Found</h1>
+            <div class="subtle">Find what’s missing. Return what you’ve found.</div>
+          </div>
+        </div>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contect.html">Contact</a>
+          <a href="faq.html">FAQ</a>
+          <button id="dark-mode-toggle">🌙</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container" id="main">
+      <section class="controls" aria-label="Board controls">
+        <div class="field">
+          <label class="sr-only" for="q">Search items</label>
+          <span class="input-icon" aria-hidden="true">🔎</span>
+          <input id="q" class="input" type="search" placeholder="Search by item, location, or description…" />
+        </div>
+
+        <div class="segmented" role="group" aria-label="Filter by status">
+          <button type="button" data-status="all" aria-pressed="true">All</button>
+          <button type="button" data-status="lost" aria-pressed="false">Lost</button>
+          <button type="button" data-status="found" aria-pressed="false">Found</button>
+        </div>
+
+        
+        </select>
+      </section>
+
+      <section aria-live="polite" aria-busy="false" style="margin-top: 0.5rem;">
+        <div id="grid" class="grid"></div>
+        <div id="empty" class="empty" hidden>No items match your filters.</div>
+      </section>
+
+      <footer>
+        <p>Front-end only demo. Data is stored in-memory in the browser for this example.</p>
+      </footer>
+    </main>
+
+    <script>
+      "use strict";
+
+      // Demo data
+      const items = [
+        { id:"1", title:"Black Backpack", status:"lost", location:"Library", date:"2025-10-05", description:"Contains a laptop, notebooks, and a water bottle.", contact:{email:"owner@example.com"}, image:null },
+        { id:"2", title:"Water Bottle", status:"found", location:"Gym Entrance", date:"2025-10-07", description:"Blue metal bottle with stickers.", contact:{email:"finder@example.com"}, image:null },
+        { id:"3", title:"Set of Keys", status:"found", location:"Parking Lot C", date:"2025-10-04", description:"Three keys and a small soccer ball keychain.", contact:{email:"campus-security@example.com"}, image:null },
+        { id:"4", title:"Graphing Calculator", status:"lost", location:"Science Building Room 210", date:"2025-10-08", description:"TI-84 Plus CE, black. Might have initials 'KM'.", contact:{email:"km-student@example.edu"}, image:null },
+        { id:"5", title:"Hoodie", status:"found", location:"Cafeteria", date:"2025-10-06", description:"Gray medium hoodie found on chair.", contact:{email:"cafeteria@example.edu"}, image:null },
+        { id:"6", title:"Laptop Charger", status:"lost", location:"Lecture Hall A", date:"2025-10-03", description:"60W USB-C charger.", contact:{email:"tech-student@example.edu"}, image:null }
+      ];
+
+      let query = "", statusFilter="all", sortOrder="newest";
+      const gridEl = document.getElementById("grid");
+      const emptyEl = document.getElementById("empty");
+      const qEl = document.getElementById("q");
+      const sortEl = document.getElementById("sort");
+      const filterButtons = Array.from(document.querySelectorAll('.segmented button'));
+      const darkModeToggle = document.getElementById("dark-mode-toggle");
+
+      const fmtDate = (iso)=>{ try{ return new Date(iso).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}catch{return iso;} };
+      const escapeText = s => String(s ?? "");
+      const contactHref = c => !c?"#":c.email?`mailto:${c.email}`:'#';
+      const makePlaceholder = (text="NO IMAGE")=>{
+        const svg=encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='450'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#e2e8f0'/><stop offset='100%' stop-color='#f1f5f9'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial' font-size='28' fill='#64748b' font-weight='700' letter-spacing='2'>${text}</text></svg>`);
+        return `data:image/svg+xml;charset=UTF-8,${svg}`;
+      };
+
+      function render(){
+        let filtered = items.filter(it=>{
+          const matchesStatus = statusFilter==="all"?true:it.status===statusFilter;
+          const q = query.trim().toLowerCase();
+          const matchesQuery = q?(it.title?.toLowerCase().includes(q)||it.location?.toLowerCase().includes(q)||it.description?.toLowerCase().includes(q)):true;
+          return matchesStatus && matchesQuery;
+        });
+
+        filtered.sort((a,b)=>{
+          if(sortOrder==="newest") return new Date(b.date)-new Date(a.date);
+          if(sortOrder==="oldest") return new Date(a.date)-new Date(b.date);
+          if(sortOrder==="az") return a.title.localeCompare(b.title);
+          if(sortOrder==="za") return b.title.localeCompare(a.title);
+          return 0;
+        });
+
+        gridEl.innerHTML="";
+        if(filtered.length===0){ emptyEl.hidden=false; return; } else { emptyEl.hidden=true; }
+
+        for(const it of filtered){
+          const card=document.createElement("article"); card.className="card"; card.id=`item-${it.id}`;
+          const thumb=document.createElement("div"); thumb.className="thumb";
+          const img=document.createElement("img"); img.src=it.image?it.image:makePlaceholder(it.status.toUpperCase()); img.alt=it.image?`${escapeText(it.title)} photo`:"Placeholder image";
+          thumb.appendChild(img);
+          const content=document.createElement("div"); content.className="content";
+          const titleRow=document.createElement("div"); titleRow.className="title-row";
+          const title=document.createElement("div"); title.className="title"; title.textContent=escapeText(it.title);
+          const pill=document.createElement("span"); pill.className=`pill ${it.status}`; pill.textContent=it.status==="lost"?"LOST":"FOUND";
+          titleRow.appendChild(title); titleRow.appendChild(pill);
+          const meta=document.createElement("div"); meta.className="meta"; const where=document.createElement("span"); where.textContent=escapeText(it.location);
+          const when=document.createElement("span"); when.textContent=fmtDate(it.date);
+          meta.appendChild(where); meta.appendChild(document.createTextNode("•")); meta.appendChild(when);
+          const desc=document.createElement("p"); desc.className="desc"; desc.textContent=escapeText(it.description);
+          const actions=document.createElement("div"); actions.className="actions";
+          const contactBtn=document.createElement("a"); contactBtn.className="btn primary"; contactBtn.href=contactHref(it.contact); contactBtn.textContent="Contact";
+          const shareBtn=document.createElement("button"); shareBtn.className="btn"; shareBtn.type="button"; shareBtn.textContent="Copy Link";
+          shareBtn.addEventListener("click",async ()=>{
+            const url=new URL(window.location.href); url.hash=`item-${it.id}`;
+            try{ await navigator.clipboard.writeText(url.toString()); shareBtn.textContent="Copied!"; setTimeout(()=>shareBtn.textContent="Copy Link",1200);}catch{alert("Unable to copy link");}
+          });
+          actions.appendChild(contactBtn); actions.appendChild(shareBtn);
+          content.appendChild(titleRow); content.appendChild(meta); content.appendChild(desc); content.appendChild(actions);
+          card.appendChild(thumb); card.appendChild(content);
+          gridEl.appendChild(card);
+        }
+      }
+
+      qEl.addEventListener("input", e=>{ query=e.target.value||""; render(); });
+      filterButtons.forEach(btn=>{ btn.addEventListener("click", ()=>{
+        statusFilter=btn.getAttribute("data-status");
+        filterButtons.forEach(b=>b.setAttribute("aria-pressed", String(b===btn)));
+        render();
+      }); });
+      sortEl.addEventListener("change", e=>{ sortOrder=e.target.value; render(); });
+// Dark mode toggle
+function setTheme(theme){
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+  // Only icon, no text
+  darkModeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+}
+
+darkModeToggle.addEventListener("click", ()=>{
+  setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");
+});
+
+const savedTheme = localStorage.getItem("theme") || "light";
+setTheme(savedTheme);
+
+      render();
+    </script>
+  </body>
+</html>

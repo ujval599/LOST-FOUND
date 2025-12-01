@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Campus Lost & Found - College Item Recovery System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .hero-banner {
+            background: 
+                linear-gradient(to right, rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.7)),
+                url('https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&auto=format&w=2071&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .campus-map {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23E5E7EB' stroke-width='4' stroke-dasharray='6%2c 14' stroke-linecap='square'/%3e%3c/svg%3e");
+        }
+
+        /* Dark Mode Styles */
+        body.dark {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+
+         body.dark .bg-white { background-color: #1F2937 !important; }
+        body.dark .bg-gray-50 { background-color: #111827 !important; }
+        body.dark .text-gray-600 { color: #d1d5db !important; }
+        body.dark .text-gray-800 { color: #f3f4f6 !important; }
+        body.dark .bg-indigo-50 { background-color: #3730a3 !important; color: #e0e7ff !important; }
+        body.dark .bg-green-50 { background-color: #064e3b !important; color: #bbf7d0 !important; }
+        body.dark .bg-yellow-50 { background-color: #78350f !important; color: #fef3c7 !important; }
+        body.dark .bg-purple-50 { background-color: #4c1d95 !important; color: #ede9fe !important; }
+        body.dark nav { background-color: #1F2937 !important; }
+        body.dark footer { background-color: #111827 !important; color: #d1d5db !important; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                  <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo" width="40">
+
+
+                </div>
+
+                <!-- Navigation Links (Desktop) -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="hover:text-indigo-600">Home</a>
+                    <a href="lostitem.html" class="hover:text-indigo-600">Lost item</a>
+                    <a href="founditem.html" class="hover:text-indigo-600">Found item</a>
+                    <a href="contect.html" class="hover:text-indigo-600">Contact</a>
+                    <a href="about.html" class="hover:text-indigo-600">About</a>
+                    <a href="faq.html" class="hover:text-indigo-600">FAQ</a>
+                    <a href="userdesbord.html" class="hover:text-indigo-600">User Desbord</a>
+                    <a href="userdesbord.html" class="hover:text-indigo-600">L&F Item</a>
+                </div>
+
+                 <!-- Login, Dark Mode & Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <a href="login.html" class="hidden sm:inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Student Login
+                    </a>
+                    <a href="login.html" 
+   onclick="localStorage.removeItem('isLoggedIn'); localStorage.removeItem('userRole'); localStorage.removeItem('userEmail');"
+   class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+   Logout
+</a>
+
+
+               <div class="flex space-x-3 items-center">
+    <button id="darkModeToggle" class="text-gray-600 hover:text-gray-800 focus:outline-none p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293a8 8 0 01-10.586-10.586 8 8 0 1010.586 10.586z" />
+        </svg>
+    </button>
+                </div>
+            </div>
+        </div>     
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-gray-100 px-4 py-3">
+            <div class="flex flex-col space-y-3">
+                <a href="/" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">Home</a>
+                <a href="lostitem.html" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">Lost item</a>
+                <a href="founditem.html" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">Found item</a>
+                <a href="contect.html" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">Contact</a>
+                <a href="userdesbord.html" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">userdesbord</a>
+                <a href="about.html" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">About</a>
+                <a href="faq.html" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">FAQ</a>
+                <a href="login.html" class="block py-2 px-4 rounded-lg hover:bg-indigo-50 hover:text-indigo-600">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Student Login
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-banner text-white py-20 md:py-28">
+        <div class="container mx-auto px-4 text-center">
+            <div class="inline-block px-4 py-1 bg-white bg-opacity-20 rounded-full mb-4 backdrop-filter backdrop-blur-sm">
+                <span class="text-sm font-medium"><i class="fas fa-university mr-1"></i> University Campus System</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Find Your Lost Items on Campus</h1>
+            <p class="text-xl mb-8">Our college community works together to reunite lost items with their owners. Report or search items easily.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="lostitem.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-bold transition flex items-center justify-center">
+                    <i class="fas fa-plus-circle mr-2"></i> Report Item
+                </a>
+                <a href="#browse" class="bg-white hover:bg-gray-100 text-indigo-700 px-8 py-3 rounded-lg font-bold transition flex items-center justify-center">
+                    <i class="fas fa-search mr-2"></i> Search Items
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="bg-indigo-50 p-6 rounded-xl">
+            <i class="fas fa-calendar-check text-3xl text-indigo-600 mb-2"></i>
+            <h3 class="text-xl font-bold text-gray-800">125</h3>
+            <p class="text-gray-600">Items Reunited</p>
+        </div>
+        <div class="bg-green-50 p-6 rounded-xl">
+            <i class="fas fa-users text-3xl text-green-600 mb-2"></i>
+            <h3 class="text-xl font-bold text-gray-800">480</h3>
+            <p class="text-gray-600">Active Users</p>
+        </div>
+        <div class="bg-yellow-50 p-6 rounded-xl">
+            <i class="fas fa-clock text-3xl text-yellow-600 mb-2"></i>
+            <h3 class="text-xl font-bold text-gray-800">12 hrs</h3>
+            <p class="text-gray-600">Avg. Return Time</p>
+        </div>
+        <div class="bg-purple-50 p-6 rounded-xl">
+            <i class="fas fa-check-circle text-3xl text-purple-600 mb-2"></i>
+            <h3 class="text-xl font-bold text-gray-800">95%</h3>
+            <p class="text-gray-600">Success Rate</p>
+        </div>
+    </div>
+</section>
+
+
+    <!-- 🔍 Search Section with backend integration -->
+    <section id="browse" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Lost & Found Items</h2>
+                <p class="text-center text-gray-600 mb-8">Search for items that might belong to you</p>
+
+                <div class="search-box bg-white rounded-xl shadow-sm p-6 mb-8 campus-map">
+                    <div class="relative mb-4">
+                        <input type="text" id="searchInput" placeholder="Search by item name, description, or location..." 
+                               class="w-full px-5 py-4 border border-gray-200 rounded-lg pl-12 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <div class="absolute left-4 top-4 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button class="filter-btn bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-200 transition">
+                            <i class="fas fa-wallet mr-1"></i> Wallets
+                        </button>
+                        <button class="filter-btn bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-200 transition">
+                            <i class="fas fa-key mr-1"></i> Keys
+                        </button>
+                        <button class="filter-btn bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-200 transition">
+                            <i class="fas fa-mobile mr-1"></i> Phones
+                        </button>
+                        <button class="filter-btn bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-200 transition">
+                            <i class="fas fa-laptop mr-1"></i> Laptops
+                        </button>
+                        <button class="filter-btn bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-200 transition">
+                            <i class="fas fa-book mr-1"></i> Books
+                        </button>
+                        <button class="filter-btn bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-200 transition">
+                            <i class="fas fa-id-card mr-1"></i> IDs
+                        </button>
+                    </div>
+
+                    <!-- Search results container -->
+                    <div id="searchResults" class="mt-4 space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-16 bg-white" id="how-it-works">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-4xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">How It Works</h2>
+                <p class="text-gray-600 text-lg">Our Lost & Found system is simple and effective. Here's how:</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 bg-indigo-50 rounded-xl shadow hover:shadow-lg transition">
+                    <i class="fas fa-pen-alt text-4xl text-indigo-600 mb-4"></i>
+                    <h4 class="text-xl font-semibold mb-2">1. Report</h4>
+                    <p class="text-gray-600">Found or lost something? Fill a quick form with item details and location.</p>
+                </div>
+                <div class="p-6 bg-green-50 rounded-xl shadow hover:shadow-lg transition">
+                    <i class="fas fa-search text-4xl text-green-600 mb-4"></i>
+                    <h4 class="text-xl font-semibold mb-2">2. Search</h4>
+                    <p class="text-gray-600">Use filters to search for lost or found items in your campus.</p>
+                </div>
+                <div class="p-6 bg-yellow-50 rounded-xl shadow hover:shadow-lg transition">
+                    <i class="fas fa-handshake text-4xl text-yellow-600 mb-4"></i>
+                    <h4 class="text-xl font-semibold mb-2">3. Reclaim</h4>
+                    <p class="text-gray-600">Contact the finder and reclaim your item by submitting proof.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer Section -->
+<footer class="bg-gray-900 text-gray-400 py-10">
+  <div class="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-4 gap-8">
+    
+    <!-- About -->
+    <div>
+      <h3 class="text-white text-xl font-semibold mb-4">Campus Lost & Found</h3>
+      <p class="text-sm leading-relaxed">
+        Helping students and staff recover lost items quickly and easily. Join our community to ensure lost items find their rightful owners.
+      </p>
+    </div>
+    
+    <!-- Contact Info -->
+    <div>
+      <h3 class="text-white text-xl font-semibold mb-4">Contact</h3>
+      <p class="text-sm">Silver Oak University, Gota, Ahmedabad, Gujarat, India</p>
+      <p class="text-sm">Phone: +91 8128860669</p>
+      <p class="text-sm">Email: lostfound11@gmail.com</p>
+    </div>
+    
+    <!-- Quick Links -->
+   <div class="footer">
+  <h3 class="font-bold text-white">Quick Links</h3>
+  <ul class="space-y-2">
+    <li><a href="about.html" class="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white">About</a></li>
+    <li><a href="faq.html" class="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white">FAQ</a></li>
+    <li><a href="contact.html" class="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white">Contact</a></li>
+    <li><a href="lost.html" class="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white">Lost item</a></li>
+    <li><a href="found.html" class="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white">Found item</a></li>
+    <li><a href="dashboard.html" class="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white">User Dashboard</a></li>
+  </ul>
+</div>
+
+    
+    <!-- Social + Newsletter -->
+    <div>
+      <h3 class="text-white text-xl font-semibold mb-4">Follow Us</h3>
+      <div class="flex space-x-4 text-gray-400 text-lg mb-6">
+        <a href="#" class="hover:text-indigo-500 transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-indigo-500 transition"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-indigo-500 transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-indigo-500 transition"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    
+  </div>
+
+  <hr class="border-gray-700 my-8" />
+
+  <p class="text-center text-gray-500 text-sm">&copy; 2025 Campus Lost & Found. All rights reserved.</p>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // --- Dark Mode Feature ---
+        const darkToggle = document.getElementById("darkModeToggle");
+        if(localStorage.getItem("darkMode") === "enabled"){
+            document.body.classList.add("dark");
+        }
+        darkToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+            if(document.body.classList.contains("dark")){
+                localStorage.setItem("darkMode","enabled");
+            } else {
+                localStorage.setItem("darkMode","disabled");
+            }
+        });
+    // SweetAlert login warning
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn !== "true") {
+        setTimeout(() => {
+            Swal.fire({
+                title: 'Login Required',
+                text: 'You are not logged in. Please login to continue.',
+                icon: 'warning',
+                confirmButtonText: 'Go to Login',
+                allowOutsideClick: false
+            }).then(() => window.location.href = "login.html");
+        }, 10000);
+    }
+
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById("mobileMenuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    if(mobileBtn){
+        mobileBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+    }
+
+    // Search
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+
+    function fetchResults(query){
+        fetch(`http://127.0.0.1:5000/api/search?query=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => renderResults(data))
+        .catch(err => {
+            console.error(err);
+            if(searchResults) searchResults.innerHTML = `<p class="text-red-500 text-center">Error fetching results.</p>`;
+        });
+    }
+
+    function renderResults(items){
+        if(!searchResults) return;
+        searchResults.innerHTML = "";
+        if(items.length === 0){
+            searchResults.innerHTML = `<p class="text-gray-600 text-center">No items found.</p>`;
+            return;
+        }
+        items.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "p-4 border border-gray-200 rounded mb-2";
+            div.innerHTML = `<strong>${item.name}</strong> - ${item.category} - ${item.location}`;
+            searchResults.appendChild(div);
+        });
+    }
+
+    if(searchInput){
+        searchInput.addEventListener("input", e => fetchResults(e.target.value));
+    }
+});
+
+</script>
+</body>
+</html>

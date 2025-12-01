@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Found Item - Campus Lost & Found</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --secondary: #10B981;
+      --accent: #F59E0B;
+      --dark: #1F2937;
+      --light: #F9FAFB;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+    .hero-banner {
+      background:
+        linear-gradient(to right, rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.7)),
+        url('https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&auto=format&w=2071&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .popup {
+      position: fixed;
+      top: 5%;
+      right: 5%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform: translateX(100%);
+      opacity: 0;
+      z-index: 50;
+    }
+    .popup.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 dark:text-gray-300 transition-colors">
+
+  <!-- ✅ Success Popup -->
+  <div id="successPopup" class="popup hidden">
+      ✅ Found item submitted successfully!
+  </div>
+
+  <!-- ✅ Error Popup -->
+  <div id="errorPopup" class="popup hidden">
+      ❌ Please fill in all required fields!
+  </div>
+
+  <!-- ✅ Responsive Navigation -->
+  <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50 transition-colors">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo" width="40">
+        </div>
+        <!-- Navigation Links -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center space-x-6 text-gray-700 dark:text-gray-200 font-medium">
+          <a href="/" class="hover:text-indigo-600 dark:hover:text-indigo-400">Home</a>
+          <a href="lostitem.html" class="hover:text-indigo-600 dark:hover:text-indigo-400">Lost item</a>
+          <a href="contect.html" class="hover:text-indigo-600 dark:hover:text-indigo-400">Contact</a>
+          <a href="about.html" class="hover:text-indigo-600 dark:hover:text-indigo-400">About</a>
+          <a href="faq.html" class="hover:text-indigo-600 dark:hover:text-indigo-400">FAQ</a>
+          <a href="userdesbord.html" class="hover:text-indigo-600 dark:hover:text-indigo-400">User Desbord</a>
+        </div>
+        <!-- Dark Mode Toggle -->
+        <button id="darkModeToggle" class="mt-2 md:mt-0 ml-auto bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner text-white py-20 md:py-28">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">Report Your Found Item</h1>
+      <p class="text-xl mb-8">Help us reunite found items with their owners by providing accurate details.</p>
+    </div>
+  </section>
+
+  <!-- Found Item Form -->
+  <section class="py-12">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-colors">
+        <form id="foundItemForm" class="p-6 space-y-6">
+          <div>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">
+              Category <span class="text-red-500">*</span>
+            </label>
+            <select id="category" required 
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
+                     focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+              <option value="">Select Category</option>
+              <option>Electronics</option>
+              <option>Books</option>
+              <option>ID Card</option>
+              <option>Wallet</option>
+              <option>Keys</option>
+              <option>Clothes</option>
+              <option>Accessories</option>
+            </select>
+          </div>
+
+         <div>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Item Name <span class="text-red-500">*</span></label>
+            <input type="text" id="itemName" required placeholder="e.g. Black leather wallet" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+          </div>
+
+          <div>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Item Description <span class="text-red-500">*</span></label>
+            <textarea id="description" required rows="4" placeholder="Describe the item in detail..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200"></textarea>
+          </div>
+
+          <!-- File uploads -->
+          <div>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Upload ID Card Photo <span class="text-red-500">*</span></label>
+            <input type="file" id="idPhoto" accept="image/*" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Accepted formats: JPG, PNG. Max size: 2MB.</p>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">ADHAR Card Photo <span class="text-red-500">*</span></label>
+            <input type="file" id="adharPhoto" accept="image/*" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Accepted formats: JPG, PNG. Max size: 2MB.</p>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">ITEM Photo <span class="text-red-500">*</span></label>
+            <input type="file" id="itemPhoto" accept="image/*" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Accepted formats: JPG, PNG. Max size: 2MB.</p>
+          </div>
+
+          <!-- Location, Date, Time, Phone -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Last Seen Location <span class="text-red-500">*</span></label>
+              <input type="text" id="location" required placeholder="e.g. Main Cafeteria" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+            </div>
+            <div>
+              <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Date Found <span class="text-red-500">*</span></label>
+              <input type="date" id="dateLost" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+            </div>
+            <div>
+              <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Time Found <span class="text-red-500">*</span></label>
+              <input type="time" id="timeLost" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 dark:text-gray-200 font-medium mb-2">Phone Number <span class="text-red-500">*</span></label>
+            <input type="tel" id="phone" required placeholder="e.g. +91 8128860669" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200">
+          </div>
+
+          <div class="mt-8">
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-lg font-bold transition">Submit Found Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 dark:bg-gray-800 text-gray-400 dark:text-gray-300 py-10 transition-colors">
+    <div class="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="text-white dark:text-gray-200 text-xl font-semibold mb-4">Campus Lost & Found</h3>
+        <p class="text-sm leading-relaxed">Helping students and staff recover lost items quickly and easily. Join our community to ensure lost items find their rightful owners.</p>
+      </div>
+      <div>
+        <h3 class="text-white dark:text-gray-200 text-xl font-semibold mb-4">Contact</h3>
+        <p class="text-sm">Silver Oak University, Gota, Ahmedabad, Gujarat, India</p>
+        <p class="text-sm">Phone: +91 8128860669</p>
+        <p class="text-sm">Email: lostfound11@gmail.com</p>
+      </div>
+      <div>
+        <h3 class="text-white dark:text-gray-200 text-xl font-semibold mb-4">Quick Links</h3>
+        <nav class="flex flex-col space-y-2 text-gray-300 dark:text-gray-400 text-base">
+          <a href="/" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition">Home</a>
+          <a href="about.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition">About</a>
+          <a href="faq.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition">FAQ</a>
+          <a href="contect.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition">Contact</a>
+          <a href="lostitem.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition">Lost item</a>
+          <a href="userdesbord.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition">User Desbord</a>
+        </nav>
+      </div>
+      <div>
+        <h3 class="text-white dark:text-gray-200 text-xl font-semibold mb-4">Follow Us</h3>
+        <div class="flex space-x-4 text-gray-400 dark:text-gray-300 text-lg mb-6">
+          <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr class="border-gray-700 dark:border-gray-600 my-8" />
+    <p class="text-center text-gray-500 dark:text-gray-400 text-sm">&copy; 2025 Campus Lost & Found. All rights reserved.</p>
+  </footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("You must login first!");
+        window.location.href = "login.html";
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem("user")) || { id: "" };
+    const form = document.getElementById("foundItemForm"); // fixed ID
+    const successPopup = document.getElementById("successPopup");
+    const errorPopup = document.getElementById("errorPopup");
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const category = document.getElementById("category").value.trim();
+        const itemName = document.getElementById("itemName").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const location = document.getElementById("location").value.trim();
+        const dateLost = document.getElementById("dateLost").value;
+        const timeLost = document.getElementById("timeLost").value;
+        const phone = document.getElementById("phone").value;
+
+        if (!category || !itemName || !description || !location || !dateLost || !timeLost || !phone) {
+            showPopup(errorPopup);
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("ownerId", currentUser.id);
+        formData.append("category", category);
+        formData.append("title", itemName);
+        formData.append("description", description);
+        formData.append("location", location);
+        formData.append("dateLost", dateLost);
+        formData.append("timeLost", timeLost);
+        formData.append("phone", phone);
+        formData.append("type", "found"); // fixed
+
+        const files = [
+            document.getElementById("idPhoto"),
+            document.getElementById("adharPhoto"),
+            document.getElementById("itemPhoto")
+        ];
+        files.forEach((fileInput, index) => {
+            if (fileInput.files[0]) {
+                formData.append(`image${index + 1}`, fileInput.files[0]);
+            }
+        });
+
+        try {
+            const res = await fetch("http://127.0.0.1:5000/api/lost", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!res.ok) throw new Error("Failed to submit found item");
+
+            form.reset();
+            showPopup(successPopup);
+
+        } catch (err) {
+            console.error(err);
+            showPopup(errorPopup);
+        }
+    });
+
+    function showPopup(popup) {
+        popup.classList.remove("hidden");
+        setTimeout(() => popup.classList.add("show"), 50);
+        setTimeout(() => {
+            popup.classList.remove("show");
+            setTimeout(() => popup.classList.add("hidden"), 500);
+        }, 3000);
+    }
+
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    darkModeToggle.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+    });
+
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark");
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQs - Campus Lost & Found</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hero-banner {
+        background: 
+            linear-gradient(to right, rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.7)),
+            url('https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&w=2071&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+
+  <!-- Navigation -->
+  <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-300">
+    <div class="container mx-auto px-4 py-3 relative flex justify-between items-center">
+     
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+            <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo" width="40">
+        </div>
+
+      <!-- Center Nav (Desktop) -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 hidden md:flex space-x-6 text-gray-700 dark:text-gray-300 font-medium">
+         <a href="/" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Home</a>
+        <a href="lostitem.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Lost item</a>
+        <a href="founditem.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Found item</a>
+        <a href="contect.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact</a>
+        <a href="about.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>
+         <a href="userdesbord.html" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">User Desbord</a>
+         <a href="L&Fitem.html" class="hover:text-indigo-600">L&F Item</a>
+      </div>
+
+      <!-- Right Side: Mobile Menu Button + Dark Mode Toggle -->
+      <div class="flex items-center space-x-4 md:space-x-2">
+        <!-- Dark Mode Toggle -->
+        <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 transition-colors duration-300 hover:bg-gray-300 dark:hover:bg-gray-600">
+          <i id="darkModeIcon" class="fas fa-moon text-lg"></i>
+        </button>
+        
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button id="mobileMenuBtn" class="text-gray-600 dark:text-gray-300 text-2xl hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobileMenu" class="hidden md:hidden bg-gray-100 dark:bg-gray-800 px-4 py-3 transition-colors duration-300">
+      <a href="index.html" class="block py-2 px-4 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Home</a>
+      <a href="lostitem.html" class="block py-2 px-4 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Lost item</a>
+      <a href="founditem.html" class="block py-2 px-4 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Found item</a>
+      <a href="contect.html" class="block py-2 px-4 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact</a>
+      <a href="about.html" class="block py-2 px-4 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>
+       <a href="userdesbord.html" class="block py-2 px-4 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">User Desbord</a>
+    </div>
+  </nav>
+
+  <script>
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const html = document.documentElement;
+
+    // Check for saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      html.classList.add('dark');
+      darkModeIcon.className = 'fas fa-sun';
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        darkModeIcon.className = 'fas fa-moon';
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        darkModeIcon.className = 'fas fa-sun';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  </script>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner text-white py-20 md:py-28">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">Frequently Asked Questions</h2>
+      <p class="text-xl mb-8">Find answers to common questions about our service.</p>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-16 px-4 bg-white dark:bg-gray-800 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto">
+      <div class="space-y-6">
+        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+          <h4 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-1">🔍 How do I report a lost item?</h4>
+          <p class="text-gray-600 dark:text-gray-300">To report a lost item, click on "Report Item" on the homepage. Fill in the required details such as item description, location where it was lost, and your contact information. Once submitted, our team will review the report and assist you in the recovery process.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+          <h4 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-1">🔎 How can I search for found items?</h4>
+          <p class="text-gray-600 dark:text-gray-300">You can search for found items by visiting the "Found" section on our homepage. Use the search bar to filter items by category, date found, or keywords related to the item. If you find a match, you can contact the person who reported it.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+          <h4 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-1">🧾 Do I need proof to claim an item?</h4>
+          <p class="text-gray-600 dark:text-gray-300">Yes, to claim an item, you must provide valid identification and any details that match the item description. This ensures that items are returned to their rightful owners.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+          <h4 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-1">🕒 How long are items stored?</h4>
+          <p class="text-gray-600 dark:text-gray-300">Lost items are stored for a period of 30 days. After this period, unclaimed items may be donated to local charities or discarded, depending on their condition.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+          <h4 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-1">📞 How can I contact support for further questions?</h4>
+          <p class="text-gray-600 dark:text-gray-300">For any additional questions or support, you can reach out to us through the "Contact" page. Fill out the contact form, and our support team will get back to you as soon as possible.</p>
+        </div>
+
+        <div class="p-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+          <h4 class="text-xl font-semibold text-indigo-700 dark:text-indigo-300 mb-1">💡 What should I do if I find a lost item?</h4>
+          <p class="text-gray-600 dark:text-gray-300">If you find a lost item, please report it using the "Found Item" section on our homepage. Provide details about the item and where you found it, so we can help reunite it with its owner.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+         
+                    <!-- Footer Section -->
+<footer class="bg-gray-900 dark:bg-gray-900 text-gray-400 py-10 transition-colors duration-300">
+  <div class="container mx-auto px-6 md:px-12 lg:px-24 grid grid-cols-1 md:grid-cols-4 gap-8">
+    
+    <!-- About -->
+    <div>
+      <h3 class="text-white text-xl font-semibold mb-4">Campus Lost & Found</h3>
+      <p class="text-sm leading-relaxed text-gray-400 dark:text-gray-400">
+        Helping students and staff recover lost items quickly and easily. Join our community to ensure lost items find their rightful owners.
+      </p>
+    </div>
+    
+    <!-- Contact Info -->
+    <div>
+      <h3 class="text-white text-xl font-semibold mb-4">Contact</h3>
+      <p class="text-sm text-gray-400 dark:text-gray-400">Silver Oak University, Gota, Ahmedabad, Gujarat, India</p>
+      <p class="text-sm text-gray-400 dark:text-gray-400">Phone: +91 8128860669</p>
+      <p class="text-sm text-gray-400 dark:text-gray-400">Email: lostfound11@gmail.com</p>
+    </div>
+    
+    <!-- Quick Links -->
+    <div>
+      <h3 class="text-white text-xl font-semibold mb-4">Quick Links</h3>
+      <nav class="flex flex-col space-y-2 text-gray-300 dark:text-gray-300 text-base">
+        <a href="index.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Home</a>
+        <a href="about.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">About</a>
+        <a href="contect.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Contact</a>
+        <a href="lostitem.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Lost item</a>
+        <a href="founditem.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">Found item</a>
+         <a href="userdesbord.html" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">User Desbord</a>
+      </nav>
+    </div>
+    
+    <!-- Social + Newsletter -->
+    <div>
+      <h3 class="text-white text-xl font-semibold mb-4">Follow Us</h3>
+      <div class="flex space-x-4 text-gray-400 dark:text-gray-400 text-lg mb-6">
+        <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+
+      
+    </div>
+    
+  </div>
+
+  <hr class="border-gray-700 my-8" />
+
+  <p class="text-center text-gray-500 dark:text-gray-400 text-sm">&copy; 2025 Campus Lost & Found. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

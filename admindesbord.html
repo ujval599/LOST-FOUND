@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-card {
+            transition: all 0.2s ease;
+        }
+
+        .item-card:hover {
+            transform: scale(1.02);
+        }
+
+        /* small helper for counter number */
+        .counter { font-variant-numeric: tabular-nums; }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: absolute;
+                z-index: 10;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        /* Dark mode support */
+body.dark {
+    --primary: #6366f1;
+    --secondary: #34d399;
+    --dark: #0f172a;
+    --light: #1e293b;
+    background-color: var(--dark);
+    color: #f1f5f9;
+}
+
+body.dark .sidebar {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+body.dark .sidebar a {
+    color: #cbd5e1;
+}
+
+body.dark .sidebar a.bg-indigo-50 {
+    background-color: #4338ca;
+    color: #fff;
+}
+
+body.dark header {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+body.dark .dashboard-card {
+    background-color: #334155;
+    border-color: transparent;
+    color: #f1f5f9;
+}
+
+body.dark .item-card {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+body.dark input {
+    background-color: #334155;
+    color: #f1f5f9;
+}
+
+body.dark a.text-indigo-600 {
+    color: #818cf8;
+}
+
+body.dark a:hover {
+    color: #fff;
+}
+
+body.dark .bg-white {
+    background-color: #1e293b !important;
+}
+
+body.dark .text-gray-800 {
+    color: #f1f5f9 !important;
+}
+
+body.dark .text-gray-500 {
+    color: #cbd5e1 !important;
+}
+
+body.dark .text-gray-600 {
+    color: #94a3b8 !important;
+}
+
+body.dark .border-gray-200 {
+    border-color: #334155 !important;
+}
+
+body.dark .bg-gray-50 {
+    background-color: #1e293b !important;
+}
+
+body.dark .bg-gray-100 {
+    background-color: #334155 !important;
+}
+
+img.rounded-full {
+    width: 60px;         /* change size as you like */
+    height: 60px;
+    border-radius: 50%;  /* makes it a circle */
+    object-fit: cover;   /* keeps image centered & cropped */
+    border: 2px solid #ccc; /* optional border */
+}
+.macbook-image {
+    width: 80px;        /* or use 100% / 4rem based on layout */
+    height: 80px;
+    border-radius: 8px; /* same as rounded-lg */
+    object-fit: cover;  /* ensures image is not stretched */
+    display: block;     /* removes inline-gap issues */
+    border: 1px solid #ddd; /* optional subtle border */
+}
+.airpods-image {
+    width: 80px;        /* or use 100% / 4rem based on layout */
+    height: 80px;
+    border-radius: 8px; /* same as rounded-lg */
+    object-fit: cover;  /* ensures image is not stretched */
+    display: block;     /* removes inline-gap issues */
+    border: 1px solid #ddd; /* optional subtle border */
+}
+.Keychain-image {
+    width: 80px;        /* or use 100% / 4rem based on layout */
+    height: 80px;
+    border-radius: 8px; /* same as rounded-lg */
+    object-fit: cover;  /* ensures image is not stretched */
+    display: block;     /* removes inline-gap issues */
+    border: 1px solid #ddd; /* optional subtle border */
+}
+.Wallet-image {
+    width: 80px;        /* or use 100% / 4rem based on layout */
+    height: 80px;
+    border-radius: 8px; /* same as rounded-lg */
+    object-fit: cover;  /* ensures image is not stretched */
+    display: block;     /* removes inline-gap issues */
+    border: 1px solid #ddd; /* optional subtle border */
+}
+.Umbrella-image {
+    width: 80px;        /* or use 100% / 4rem based on layout */
+    height: 80px;
+    border-radius: 8px; /* same as rounded-lg */
+    object-fit: cover;  /* ensures image is not stretched */
+    display: block;     /* removes inline-gap issues */
+    border: 1px solid #ddd; /* optional subtle border */
+}
+.watch-image {
+    width: 80px;        /* or use 100% / 4rem based on layout */
+    height: 80px;
+    border-radius: 8px; /* same as rounded-lg */
+    object-fit: cover;  /* ensures image is not stretched */
+    display: block;     /* removes inline-gap issues */
+    border: 1px solid #ddd; /* optional subtle border */
+}
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white w-64 border-r border-gray-200 flex flex-col">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo" width="40">
+                    <span class="font-bold text-xl text-indigo-600">Lost & Found</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="admindesbord.html" class="flex items-center space-x-3 p-3 rounded-lg bg-indigo-50 text-indigo-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+
+                
+
+                <a href="reportfound_admin.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Report Found</span>
+                </a>
+
+                <a href="reportlost_admin.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Report Lost</span>
+                </a>
+
+              <a href="adminprofile.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+    <!-- SVG icon -->
+    <span>My Profile</span>
+</a>
+
+<a href="adminsetting.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+    <!-- SVG icon -->
+    <span>Settings</span>
+</a>
+
+            </nav>
+
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <img src="https://placehold.co/40x40" alt="User profile picture - Professional headshot of a smiling person with blue background" class="rounded-full">
+                    <div>
+                        <p class="font-medium">Dhruvraj Chauhan</p>
+                        <p class="text-sm text-gray-500">Admin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <button class="md:hidden" onclick="toggleSidebar()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
+                <div class="flex-1 max-w-md ml-4 md:ml-0">
+                    <div class="relative">
+                        <input id="globalSearch" type="text" placeholder="Search lost items..." class="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="relative text-gray-600 hover:text-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="absolute top-0 right-0 inline-block w-2 h-2 transform translate-x-1 -translate-y-1 bg-red-500 rounded-full"></span>
+                    </button>
+
+                    <div class="w-px h-6 bg-gray-200"></div>
+
+                    <div class="flex items-center">
+                        <img src="static/img/admin_img.png" alt="User profile picture thumbnail - Close-up of same person as sidebar but cropped square" class="rounded-full">
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+                        <p class="text-gray-600">Welcome back, Ujval Bhavre!</p>
+                    </div>
+
+<div class="flex space-x-3 items-center">
+    <button id="darkModeToggle" class="text-gray-600 hover:text-gray-800 focus:outline-none p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293a8 8 0 01-10.586-10.586 8 8 0 1010.586 10.586z" />
+        </svg>
+    </button>
+
+    
+</div>
+
+
+
+    
+                </div>
+
+                <!-- Stats Cards (integrated: includes Total Items Received & Returned) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Items Received (new) -->
+                    <div class="dashboard-card bg-white rounded-xl shadow p-6 border-l-4 border-indigo-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Total Items Received</p>
+                                <p id="totalReceived" class="text-3xl font-bold mt-2 counter">0</p>
+                                <p class="text-xs text-gray-400 mt-1">All items logged into the system</p>
+                            </div>
+                            <div class="bg-indigo-100 p-3 rounded-full">
+                                <!-- icon kept stylistically consistent -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-600 mt-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
+                            </svg>
+                            12% increase from last week
+                        </p>
+                    </div>
+
+                    <!-- Total Items Returned (new) -->
+                    <div class="dashboard-card bg-white rounded-xl shadow p-6 border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Total Items Returned</p>
+                                <p id="totalReturned" class="text-3xl font-bold mt-2 counter">0</p>
+                                <p class="text-xs text-gray-400 mt-1">Items successfully reunited with owners</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-600 mt-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
+                            </svg>
+                            18% increase from last week
+                        </p>
+                    </div>
+
+                    <!-- Active Claims (kept from original) -->
+                    <div class="dashboard-card bg-white rounded-xl shadow p-6 border-l-4 border-yellow-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Active Claims</p>
+                                <p id="activeClaims" class="text-3xl font-bold mt-2">23</p>
+                                <p class="text-xs text-gray-400 mt-1">Claims currently being processed</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-red-600 mt-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12 13a1 1 0 100-2H9a1 1 0 100 2h3zm-1.586-6.414a1 1 0 00-1.414 1.414L9.586 9H7a1 1 0 100 2h2.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414l-3-3z" clip-rule="evenodd" />
+                            </svg>
+                            4% decrease from last week
+                        </p>
+                    </div>
+
+                    <!-- Unclaimed Items (kept from original) -->
+                    <div class="dashboard-card bg-white rounded-xl shadow p-6 border-l-4 border-red-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Unclaimed Items</p>
+                                <p id="unclaimedItems" class="text-3xl font-bold mt-2">12</p>
+                                <p class="text-xs text-gray-400 mt-1">Items waiting for owner verification</p>
+                            </div>
+                            <div class="bg-red-100 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-600 mt-3 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
+                            </svg>
+                            8% increase from last week
+                        </p>
+                    </div>
+                </div>
+
+            
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow p-6 lg:col-span-2">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-semibold text-gray-800">Recent Lost Items</h2>
+                            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800">View All</a>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="item-card bg-gray-50 hover:bg-white p-4 rounded-lg border border-gray-100">
+                                <div class="flex items-start space-x-4">
+                                    <img src="static/img/macbook.jpeg" alt="Gold-colored watch with brown leather strap" class="macbook-image">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="font-medium text-gray-800">MacBook Pro</h3>
+                                            <span class="text-xs px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full">High Priority</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500 mt-1">Lost in Library on May 12, 2025</p>
+                                        <div class="flex items-center mt-2 text-sm">
+                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item-card bg-gray-50 hover:bg-white p-4 rounded-lg border border-gray-100">
+                                <div class="flex items-start space-x-4">
+                                    <img src="static/img/wallet.jpg" alt="Gold-colored watch with brown leather strap" class="Wallet-image">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="font-medium text-gray-800">Wallet</h3>
+                                            <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">Medium Priority</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500 mt-1">Lost in Cafeteria on May 10, 2025</p>
+                                        <div class="flex items-center mt-2 text-sm">
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item-card bg-gray-50 hover:bg-white p-4 rounded-lg border border-gray-100">
+                                <div class="flex items-start space-x-4">
+                                    <img src="static/img/airpods.jpg" alt="Gold-colored watch with brown leather strap" class="airpods-image">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="font-medium text-gray-800">AirPods Pro</h3>
+                                            <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">Low Priority</span>
+                                        </div>
+                                        <p class="text-sm text-gray-500 mt-1">Lost in Gym on May 8, 2025</p>
+                                        <div class="flex items-center mt-2 text-sm">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-semibold text-gray-800">Recently Found Items</h2>
+                            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800">View All</a>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="item-card bg-gray-50 hover:bg-white p-4 rounded-lg border border-gray-100">
+                                <div class="flex items-start space-x-4">
+                                    <img src="static/img/keychein.jpg" alt="Gold-colored watch with brown leather strap" class="Keychain-image">
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-800">Keychain</h3>
+                                        <p class="text-sm text-gray-500 mt-1">Found near Parking Lot B on May 13, 2025</p>
+                                        <div class="flex items-center mt-2 text-sm">
+                                            <span class="text-gray-500">Status:</span>
+                                            <span class="ml-2 font-medium text-green-600">Claimed</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item-card bg-gray-50 hover:bg-white p-4 rounded-lg border border-gray-100">
+                                <div class="flex items-start space-x-4">
+                                    <img src="static/img/Umbrella.jpg" alt="Gold-colored watch with brown leather strap" class="Umbrella-image">
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-800">Umbrella</h3>
+                                        <p class="text-sm text-gray-500 mt-1">Found in Lecture Hall 3 on May 12, 2025</p>
+                                        <div class="flex items-center mt-2 text-sm">
+                                            <span class="text-gray-500">Status:</span>
+                                            <span class="ml-2 font-medium text-yellow-600">Pending Verification</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item-card bg-gray-50 hover:bg-white p-4 rounded-lg border border-gray-100">
+                                <div class="flex items-start space-x-4">
+                                    <img src="static/img/watch.jpg" alt="Gold-colored watch with brown leather strap" class="watch-image">
+
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-800">Watch</h3>
+                                        <p class="text-sm text-gray-500 mt-1">Found in Restroom on May 10, 2025</p>
+                                        <div class="flex items-center mt-2 text-sm">
+                                            <span class="text-gray-500">Status:</span>
+                                            <span class="ml-2 font-medium text-red-600">Unclaimed</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Map -->
+                <div class="bg-white rounded-xl shadow p-6 mb-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800">Common Lost Item Locations</h2>
+                        <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800">View Details</a>
+                    </div>
+
+                    <div class="relative rounded-lg overflow-hidden h-64">
+                        
+                        <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+
+                        <div class="absolute bottom-6 left-6 right-6 flex justify-between text-white">
+                            <div class="bg-indigo-600 bg-opacity-90 px-4 py-2 rounded-lg">
+                                <img src="static/img/map1.jpg" alt="Gold-colored watch with brown leather strap" class="img">
+                                <p class="font-medium">Library</p>
+                                <p class="text-xs">32 items lost</p>
+                            </div>
+
+                            <div class="bg-green-600 bg-opacity-90 px-4 py-2 rounded-lg">
+                                <img src="static/img/map2.jpg" alt="Gold-colored watch with brown leather strap" class="img">
+                                <p class="font-medium">Cafeteria</p>
+                                <p class="text-xs">28 items lost</p>
+                            </div>
+
+                            <div class="bg-yellow-600 bg-opacity-90 px-4 py-2 rounded-lg">
+                                <img src="static/img/map3.jpg" alt="Gold-colored watch with brown leather strap" class="img">
+                                <p class="font-medium">class</p>
+                                <p class="text-xs">19 items lost</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+<script>
+// ======================= Dark Mode =======================
+const darkModeToggle = document.getElementById('darkModeToggle');
+darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+
+    // Store preference
+    if(document.body.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'enabled');
+    } else {
+        localStorage.setItem('darkMode', 'disabled');
+    }
+});
+
+// Load dark mode preference & check admin token
+document.addEventListener('DOMContentLoaded', () => {
+    // Apply dark mode if enabled
+    if(localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark');
+    }
+
+    // Check if admin is logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('You must login as admin first!');
+        window.location.href = '/login.html';
+        return;
+    }
+
+    // Fetch dashboard data & setup search
+    fetchDashboardData(token);
+    setupSearch();
+});
+
+// ======================= Sidebar Toggle =======================
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('active');
+}
+
+// ======================= Counter Animation =======================
+function animateCount(el, to, duration = 800) {
+    const start = 0;
+    const range = to - start;
+    const startTime = performance.now();
+
+    function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        const value = Math.floor(start + ease * range);
+        el.textContent = value.toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = to.toLocaleString();
+    }
+
+    requestAnimationFrame(step);
+}
+
+// ======================= Update Dashboard =======================
+function updateDashboard(data) {
+    if (!data || !data.stats) return;
+    const stats = data.stats;
+
+    animateCount(document.getElementById('totalReceived'), stats.total_items || 0, 900);
+    animateCount(document.getElementById('totalReturned'), stats.approved_items || 0, 900);
+    document.getElementById('activeClaims').textContent = stats.pending_items || 0;
+    document.getElementById('unclaimedItems').textContent = stats.rejected_items || 0;
+}
+
+// ======================= Fetch Dashboard Data =======================
+async function fetchDashboardData(token) {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/admin/stats', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        updateDashboard(data);
+    } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+        // Fallback demo data
+        const demoData = {
+            stats: {
+                total_items: 124,
+                approved_items: 89,
+                pending_items: 23,
+                rejected_items: 12
+            }
+        };
+        updateDashboard(demoData);
+    }
+}
+
+// ======================= Search Functionality =======================
+function setupSearch() {
+    const searchInput = document.getElementById('globalSearch');
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            if (query) console.log('Searching for:', query);
+            // Optional: redirect to search page
+            // window.location.href = `/search?query=${encodeURIComponent(query)}`;
+        }
+    });
+}
+
+console.log('Admin dashboard JS loaded.');
+
+</script>
+    
+
+    </body>
+</html>

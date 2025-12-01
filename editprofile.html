@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white w-64 border-r border-gray-200 flex flex-col">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <img src="{{ url_for('static', filename='img/image.png') }}" alt="Logo" width="40">
+                    <span class="font-bold text-xl text-indigo-600">Lost & Found</span>
+                </div>
+            </div>
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="admindesbord.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <span>Dashboard</span>
+                </a>
+                <a href="adminprofile.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <span>My Profile</span>
+                </a>
+                <a href="editprofile.html" class="flex items-center space-x-3 p-3 rounded-lg bg-indigo-50 text-indigo-600">
+                    <span>Edit Profile</span>
+                </a>
+                <a href="changepassadmin.html" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100">
+                    <span>Change Password</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-gray-800">Edit Profile</h1>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+                <div class="bg-white rounded-xl shadow p-6">
+                    <form>
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" value="Ujval Bhavre" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" value="ujval.bhavre@example.com" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                            <input type="tel" id="phone" name="phone" value="(123) 456-7890" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                            <input type="text" id="address" name="address" value="123 Admin St, City, Country" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+
+                        <button type="submit" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 focus:outline-none">Save Changes</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
